@@ -44,7 +44,7 @@ namespace MovieProject.Controllers
 
         // PUT api/<MovieController>/{movieId}
         [HttpPut("{movieId}")]
-        public Movie Put(int id, [FromBody] Movie movie)
+        public Movie Put(int movieId, [FromBody] Movie movie)
         {
             return movieDAO.updateMovie(movie);
         }
