@@ -80,7 +80,18 @@
       </b-modal>
     </div>
 
-    <b-table striped dark hover outlined :items="items" :fields="fields">
+    <b-table 
+    striped 
+    dark 
+    hover 
+    outlined 
+    :items="items" 
+    :fields="fields"
+    :sort-by.sync="sortBy"
+    :sort-desc.sync="sortDesc"
+    sort-icon-left
+    responsive="sm"
+    >
       <template v-slot:cell(actions)="{ item }">
         <div style="width: 230px">
           <button class="btn">
@@ -113,7 +124,6 @@
 <script>
 import MovieService from "../services/MovieService";
 export default {
-
   data() {
     return {
       modalShow: false,
@@ -128,7 +138,15 @@ export default {
       releaseYearState: null,
       descriptionState: null,
 
-      fields: ["name", "releaseYear", "description", "Actions"],
+      sortBy: 'name',
+      sortDesc: false,
+
+      fields: [
+        { key: 'name', sortable: true},
+        { key: 'releaseYear',  sortable: true},
+        { key: 'description',  sortable: true},
+        { key: 'actions', sortable: false}
+      ],
       items: [],
     };
   },
@@ -175,7 +193,8 @@ export default {
       if (
         this.validateState("name-input") &&
         this.validateState("release-year-input") &&
-        (this.validateState("description-input") || this.validateState("description-input")==null)
+        (this.validateState("description-input") ||
+          this.validateState("description-input") == null)
       ) {
         const item = {
           name: this.name,
@@ -208,39 +227,6 @@ export default {
       MovieService.addMovie(item);
       window.location.reload();
     },
-
-    // checkFormValidity() {
-    //   const valid = this.$refs.form.checkValidity();
-    //   this.nameState = valid;
-    //   this.releaseYearState = valid;
-    //   this.descriptionState = valid;
-    //   return valid;
-    // },
-
-    // handleOk(bvModalEvent) {
-    //   bvModalEvent.preventDefault();
-    //   this.submitForm();
-    // },
-
-    // submitForm() {
-    //   if (!this.checkFormValidity()) {
-    //     return;
-    //   }
-    //   this.addMovie;
-    //   this.$nextTick(() => {
-    //     this.$bvModal.hide("modal-prevent-closing");
-    //   });
-    //   this.resetModal;
-    // },
-
-    // resetModal() {
-    //   this.name = "";
-    //   this.nameState = null;
-    //   this.releaseYear = "";
-    //   this.releaseYearState = null;
-    //   this.description = "";
-    //   this.descriptionState = null;
-    // },
   },
 };
 </script>
