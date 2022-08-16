@@ -1,36 +1,26 @@
 <template>
   <div>
-    <div class="movie" v-bind:key="movie.movieId">
-      <div class="card">
-        <div class="card-content"></div>
-        <div class="content">
-          {{ movie.description }}
-        </div>
-        <button class="button is-danger is-outlined">Favorite</button>
-      </div>
-    </div>
+    <b-table striped hover :items="items" :fields="fields"></b-table>
   </div>
 </template>
 
 <script>
+import MovieService from "../services/MovieService";
 export default {
-  name: "movie",
-  props: ["movie"],
-
-  methods: {},
+  data() {
+    return {
+      fields: ["name", "releaseYear", "description", "Actions"],
+      items: [],
+    };
+  },
+  created() {
+    MovieService.getAllMovies().then((response) => {
+      this.items = response.data;
+    });
+  },
 };
 </script>
 
 <style>
-.container {
-  cursor: pointer;
-}
 
-.card-content:hover {
-  background-color: limegreen;
-}
-
-img {
-  border: solid black 1px;
-}
 </style>  

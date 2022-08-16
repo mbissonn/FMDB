@@ -24,7 +24,7 @@ namespace MovieProject.DAO
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("INSERT into Movies OUTPUT INSERTED id VALUES(@title, @description, @releaseYear)");
+                SqlCommand cmd = new SqlCommand("INSERT into Movies (name, description, release_year) VALUES(@title, @description, @releaseYear); SELECT SCOPE_IDENTITY();") ;
                 cmd.Connection = connection;
                 cmd.Parameters.AddWithValue("@title", movieToAdd.name);
                 cmd.Parameters.AddWithValue("@description", movieToAdd.description);
@@ -87,7 +87,7 @@ namespace MovieProject.DAO
 
         // Update Method
 
-        public Movie updateMovie(Movie movieToUpdate)
+        public Movie updateMovie(Movie movieToUpdate, int movieId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -97,9 +97,9 @@ namespace MovieProject.DAO
                 cmd.Parameters.AddWithValue("@name", movieToUpdate.name);
                 cmd.Parameters.AddWithValue("@description", movieToUpdate.description);
                 cmd.Parameters.AddWithValue("@releaseYear", movieToUpdate.releaseYear);
-                cmd.Parameters.AddWithValue("@releaseYear", movieToUpdate.id);
+                cmd.Parameters.AddWithValue("@movieId", movieId);
                 cmd.ExecuteNonQuery();
-                movieToUpdate = getMovieById(movieToUpdate.id);
+                movieToUpdate = getMovieById(movieId);
             }
             if (movieToUpdate == null)
             {

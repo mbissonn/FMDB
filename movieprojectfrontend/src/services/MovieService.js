@@ -7,18 +7,18 @@ export default {
     },
 
     getAllMovies() {
-        return axios.get('/api/movie')
+        return axios.get('https://localhost:44388/api/movie')
     },
 
     getMovieById(movieId) {
-        return axios.get(`/api/movie/${movieId}`)
+        return axios.get(`https://localhost:44388/api/movie/${movieId}`)
     },
 
     updateMovie(movieId, movie) {
-        return axios.put(`/api/movie/${movieId}`, movie)
+        return axios.put(`https://localhost:44388/api/movie/${movieId}`, movie)
     },
 
     deleteMovie(movieId) {
-        return axios.delete(`/api/movie/${movieId}`)
+        return axios.delete(`https://localhost:44388/api/movie/${movieId}`)
     }
 }

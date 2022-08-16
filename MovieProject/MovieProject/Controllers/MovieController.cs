@@ -46,7 +46,7 @@ namespace MovieProject.Controllers
         [HttpPut("{movieId}")]
         public Movie Put(int movieId, [FromBody] Movie movie)
         {
-            return movieDAO.updateMovie(movie);
+            return movieDAO.updateMovie(movie, movieId);
         }
 
         // DELETE api/<MovieController>/{movieId}

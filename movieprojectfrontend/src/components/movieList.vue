@@ -4,20 +4,20 @@
       v-for="movie in movieList"
       v-bind:key="movie.movieId"
       v-bind:movie="movie"
-    />
+    >
+    </movie>
   </div>
 </template>
 
-
-
 <script>
-import MovieService from '../services/MovieService';
-import Movie from './Movie.vue';
+
+import MovieService from "../services/MovieService";
+import Movie from "./Movie.vue";
 
 export default {
   name: "movie-list",
   components: {
-    Movie
+    Movie,
   },
 
   data() {
@@ -37,8 +37,8 @@ export default {
   created() {
     MovieService.getAllMovies().then((response) => {
       this.movieList = response.data;
-    })
-  }
+    });
+  },
 };
 </script>
 

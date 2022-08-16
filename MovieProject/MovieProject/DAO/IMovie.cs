@@ -11,7 +11,7 @@ namespace MovieProject.DAO
         List<Movie> getAllMovies();
         Movie getMovieById(int id);
         Movie addMovie(Movie movieToAdd);
-        Movie updateMovie(Movie movieToUpdate);
+        Movie updateMovie(Movie movieToUpdate, int movieId);
         void deleteMovie(int id);
     }
 }
