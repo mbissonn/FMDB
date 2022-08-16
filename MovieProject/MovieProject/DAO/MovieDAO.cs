@@ -92,11 +92,12 @@ namespace MovieProject.DAO
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE movies SET name = @name, description = @description, release_year = @releaseYear");
+                SqlCommand cmd = new SqlCommand("UPDATE movies SET name = @name, description = @description, release_year = @releaseYear WHERE id = @movieId");
                 cmd.Connection = connection;
                 cmd.Parameters.AddWithValue("@name", movieToUpdate.name);
                 cmd.Parameters.AddWithValue("@description", movieToUpdate.description);
                 cmd.Parameters.AddWithValue("@releaseYear", movieToUpdate.releaseYear);
+                cmd.Parameters.AddWithValue("@releaseYear", movieToUpdate.id);
                 cmd.ExecuteNonQuery();
                 movieToUpdate = getMovieById(movieToUpdate.id);
             }
