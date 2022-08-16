@@ -50,7 +50,7 @@
               name="release-year-input"
               type="number"
               v-model="releaseYear"
-              v-validate="{ required: true, min_value:1893, digits: 4}"
+              v-validate="{ required: true, min_value: 1893, digits: 4 }"
               :state="validateState('release-year-input')"
             ></b-form-input>
           </b-form-group>
@@ -171,16 +171,24 @@ export default {
     },
 
     saveHandler(id) {
-      const item = {
-        name: this.name,
-        releaseYear: parseInt(this.releaseYear),
-        description: this.description,
-      };
-      console.log(item);
-      if (this.buttonOrigin == "copy" || this.buttonOrigin == "add") {
-        this.addMovie(item);
+      if (
+        this.validateState("name-input") &&
+        this.validateState("release-year-input") &&
+        this.validateState("description-input")
+      ) {
+        const item = {
+          name: this.name,
+          releaseYear: parseInt(this.releaseYear),
+          description: this.description,
+        };
+        console.log(item);
+        if (this.buttonOrigin == "copy" || this.buttonOrigin == "add") {
+          this.addMovie(item);
+        } else {
+          this.editItem(id, item);
+        }
       } else {
-        this.editItem(id, item);
+        return;
       }
     },
 
