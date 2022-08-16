@@ -2,13 +2,14 @@
   <div>
     <div style="display: flex; justify-content: flex-end">
       <b-button
-        @click="buttonHandler(0)"
+        @click="addCopyEditHandler(0)"
         class="btn"
         variant="primary"
         style="padding: 7.5px"
       >
-        <b-icon icon="plus-circle-fill"></b-icon> Add</b-button
-      >
+        <b-icon icon="plus-circle-fill"></b-icon> Add
+      </b-button>
+
       <b-modal
         id="modal-1"
         title="Movie Record Tool"
@@ -63,12 +64,9 @@
           </b-form-group>
         </form>
         <template slot="modal-footer">
-          <b-button variant="primary">Save</b-button>
-          <b-button @click="cancelHandler()" variant="warning"
-            >Cancel</b-button
-          >
-          <b-button @click="deleteItem(MovieService.getMovieById(this.id))" variant="danger"
-            >Delete</b-button
+          <b-button @click="saveHandler()" variant="primary">Save</b-button>
+          <b-button @click="cancelHandler()" variant="warning">Cancel</b-button>
+          <b-button @click="deleteItem(id)" variant="danger">Delete</b-button
           >
         </template>
       </b-modal>
@@ -80,21 +78,21 @@
           <button class="btn">
             <b-icon
               icon="pencil-square"
-              @click="buttonHandler(1, item)"
+              @click="addCopyEditHandler('edit',item)"
               variant="white"
             ></b-icon>
           </button>
           <button class="btn">
             <b-icon
               icon="files"
-              @click="buttonHandler(2, item)"
+              @click="addCopyEditHandler('copy',item)"
               variant="white"
             ></b-icon>
           </button>
           <button class="btn">
             <b-icon
               icon="trash"
-              @click="deleteItem(3, item)"
+              @click="deleteItem(item.id)"
               variant="danger"
             ></b-icon>
           </button>
@@ -112,7 +110,7 @@ export default {
     return {
       modalShow: false,
 
-      copy: false,
+      buttonOrigin: "",
 
       id: null,
       name: "",
@@ -134,11 +132,15 @@ export default {
   },
 
   methods: {
-      cancelHandler(){
-          this.modalShow=false;
-      },
-    buttonHandler(origin, item) {
-      this.modalshow = false;
+
+    cancelHandler() {
+      this.modalShow = false;
+    },
+
+    addCopyEditHandler(buttonOrigin, item) {
+      this.modalShow = true;
+      this.buttonOrigin = buttonOrigin;
+      this.id = null;
       if (item != null) {
         this.id = item.id;
         this.name = item.name;
@@ -149,71 +151,75 @@ export default {
         this.name = "";
         this.releaseYear = null;
         this.description = "";
-        this.nameState = null;
-        this.releaseYearState = null;
-        this.descriptionState = null;
       }
-      if (origin == 1) {
-        this.copy = true;
-      } else {
-        this.copy = false;
-      }
-      this.modalShow = true;
     },
 
-    editItem() {
+    saveHandler(){
+        if(this.buttonOrigin=="copy"||this.buttonOrigin=="add"){
+            this.addMovie();
+        } else {
+            const item = this.getMovie(this.id);
+            this.editItem(item);
+        }
+    },
+
+    getMovie(movieId){
+        MovieService.getMovieById(movieId);
+    },
+
+    editItem(item) {
+      MovieService.updateMovie(item.id, item)
       window.location.reload();
     },
     copyItem(item) {
       MovieService.addMovie(item);
       window.location.reload();
     },
-    deleteItem(item) {
-      MovieService.deleteMovie(item.id);
+    deleteItem(id) {
+      MovieService.deleteMovie(id);
       window.location.reload();
     },
-
     addMovie() {
-      const movie = JSON.stringify({
-        name: this.name,
-        releaseYear: this.year,
-        description: this.description,
-      });
-      MovieService.addMovie(movie);
+          const item = JSON.stringify({
+          name: this.name,
+          releaseYear: this.year,
+          description: this.description,
+          });
+      MovieService.addMovie(item);
     },
 
-    checkFormValidity() {
-      const valid = this.$refs.form.checkValidity();
-      this.nameState = valid;
-      this.releaseYearState = valid;
-      this.descriptionState = valid;
-      return valid;
-    },
+    // checkFormValidity() {
+    //   const valid = this.$refs.form.checkValidity();
+    //   this.nameState = valid;
+    //   this.releaseYearState = valid;
+    //   this.descriptionState = valid;
+    //   return valid;
+    // },
 
-    handleOk(bvModalEvent) {
-      bvModalEvent.preventDefault();
-      this.submitForm();
-    },
+    // handleOk(bvModalEvent) {
+    //   bvModalEvent.preventDefault();
+    //   this.submitForm();
+    // },
 
-    submitForm() {
-      if (!this.checkFormValidity()) {
-        return;
-      }
-      this.addMovie;
-      this.$nextTick(() => {
-        this.$bvModal.hide("modal-prevent-closing");
-      });
-      this.resetModal;
-    },
+    // submitForm() {
+    //   if (!this.checkFormValidity()) {
+    //     return;
+    //   }
+    //   this.addMovie;
+    //   this.$nextTick(() => {
+    //     this.$bvModal.hide("modal-prevent-closing");
+    //   });
+    //   this.resetModal;
+    // },
 
-    resetModal() {
-      this.name = "";
-      this.nameState = null;
-      this.releaseYear = "";
-      this.releaseYearState = null;
-      this.description = "";
-      this.descriptionState = null;
-    },
+    // resetModal() {
+    //   this.name = "";
+    //   this.nameState = null;
+    //   this.releaseYear = "";
+    //   this.releaseYearState = null;
+    //   this.description = "";
+    //   this.descriptionState = null;
+    // },
   },
 };
 </script>
