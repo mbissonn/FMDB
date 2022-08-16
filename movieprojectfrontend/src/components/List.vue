@@ -64,10 +64,10 @@
         </form>
         <template slot="modal-footer">
           <b-button variant="primary">Save</b-button>
-          <b-button @click="$bvModal.hide('modal-1')" variant="warning"
+          <b-button @click="cancelHandler()" variant="warning"
             >Cancel</b-button
           >
-          <b-button @click="deleteItem(this.id)" variant="danger"
+          <b-button @click="deleteItem(MovieService.getMovieById(this.id))" variant="danger"
             >Delete</b-button
           >
         </template>
@@ -134,6 +134,9 @@ export default {
   },
 
   methods: {
+      cancelHandler(){
+          this.modalShow=false;
+      },
     buttonHandler(origin, item) {
       this.modalshow = false;
       if (item != null) {
