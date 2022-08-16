@@ -1,31 +1,30 @@
 <template>
-
   <div id="app">
-
     <body>
-
       <h1>Movie Database</h1>
 
       <div style="display: flex; justify-content: flex-end">
         <b-button
           v-b-modal.modal-1
-         
           class="btn"
           variant="primary"
           style="padding: 7.5px"
         >
           <b-icon icon="plus-circle-fill"></b-icon> Add
         </b-button>
-        <b-modal 
-          id="modal-1" 
-          title = "Create a New Movie Record"
+        <b-modal
+          id="modal-1"
+          title="Create a New Movie Record"
+
           header-bg-variant="dark"
           header-border-variant="light"
           body-text-variant="dark"
           footer-border-variant="light"
           footer-bg-variant="secondary"
+
+          @ok="handleOk"
         >
-          <form ref="form" @submit.stop.prevent="handleSubmit">
+          <form ref="form" @submit.stop.prevent="submitForm">
             <b-form-group
               label="Name:"
               label-for="name-input"
@@ -39,7 +38,7 @@
                 required
               ></b-form-input>
             </b-form-group>
-            
+
             <b-form-group
               label="Release Year:"
               label-for="release-year-input"
@@ -52,7 +51,6 @@
                 :state="releaseYearState"
                 required
               ></b-form-input>
-            
             </b-form-group>
             <b-form-group
               label="Description:"
@@ -67,7 +65,6 @@
                 required
               ></b-form-input>
             </b-form-group>
-            
           </form>
         </b-modal>
       </div>
@@ -75,16 +72,13 @@
       <div>
         <List />
       </div>
-
     </body>
-
   </div>
-
 </template>
 
 <script>
-
 import List from "./components/List.vue";
+import MovieService from "./services/MovieService";
 
 export default {
   name: "App",
@@ -92,21 +86,62 @@ export default {
     List,
   },
   data() {
-    return{
-      name:'',
-      releaseYear:null,
-      description:'',
+    return {
+      name: "",
+      releaseYear: null,
+      description: "",
       nameState: null,
       releaseYearState: null,
-      descriptionState: null
-    }
-  }
-};
+      descriptionState: null,
+    };
+  },
+  methods: {
+    addMovie() {
+      const movie = JSON.stringify({
+        name: this.name,
+        releaseYear: this.year,
+        description: this.description,
+      });
+      MovieService.addMovie(movie);
+    },
 
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity();
+      this.nameState = valid;
+      this.releaseYearState = valid;
+      this.descriptionState = valid;
+      return valid;
+    },
+
+    handleOk(bvModalEvent) {
+      bvModalEvent.preventDefault()
+      this.submitForm()
+    },
+
+    submitForm() {
+      if (!this.checkFormValidity()) {
+        return;
+      }
+      this.addMovie
+      this.$nextTick(() => {
+          this.$bvModal.hide('modal-prevent-closing') 
+        })
+      this.resetModal
+    },
+
+    resetModal() {
+      this.name = "";
+      this.nameState = null;
+      this.releaseYear = "";
+      this.releaseYearState = null;
+      this.description = "";
+      this.descriptionState = null;
+    },
+  },
+};
 </script>
 
 <style>
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -129,5 +164,4 @@ button {
   margin-bottom: 7.5px;
   margin-right: 7.5px;
 }
-
 </style>
