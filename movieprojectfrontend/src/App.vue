@@ -2,18 +2,19 @@
   <div id="app">
     <div>
       <h2 class = "title">Movie Database</h2>
-      <div><movie-list /></div>
+      <div><List/></div>
     </div>
   </div>
 </template>
 
 <script>
-import MovieList from "./components/MovieList.vue";
+
+import List from "./components/List.vue";
 
 export default {
   name: "App",
   components: {
-    MovieList,
+    List,
   },
 };
 </script>
@@ -23,7 +24,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* text-align: left; */
   color: #2c3e50;
   margin-top: 60px;
 }
