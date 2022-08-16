@@ -2,12 +2,13 @@
   <div>
     <div style="display: flex; justify-content: flex-end">
       <b-button
-        v-b-modal.modal-1
+        @click="buttonHandler(0)"
         class="btn"
         variant="primary"
         style="padding: 7.5px"
       >
-        <b-icon icon="plus-circle-fill"></b-icon> Add</b-button>
+        <b-icon icon="plus-circle-fill"></b-icon> Add</b-button
+      >
       <b-modal
         id="modal-1"
         title="Movie Record Tool"
@@ -17,7 +18,7 @@
         body-text-variant="dark"
         footer-border-variant="light"
         footer-bg-variant="secondary"
-        @ok="handleOk"
+        v-model="modalShow"
       >
         <form ref="form" @submit.stop.prevent="submitForm">
           <b-form-group
@@ -62,9 +63,13 @@
           </b-form-group>
         </form>
         <template slot="modal-footer">
-            <b-button variant = "primary">Save</b-button>
-            <b-button  @click="$bvModal.hide('modal-1')" variant = "warning">Cancel</b-button>
-            <b-button variant = "danger">Delete</b-button>
+          <b-button variant="primary">Save</b-button>
+          <b-button @click="$bvModal.hide('modal-1')" variant="warning"
+            >Cancel</b-button
+          >
+          <b-button @click="deleteItem(this.id)" variant="danger"
+            >Delete</b-button
+          >
         </template>
       </b-modal>
     </div>
@@ -75,21 +80,21 @@
           <button class="btn">
             <b-icon
               icon="pencil-square"
-              @click="editItem(item)"
+              @click="buttonHandler(1, item)"
               variant="white"
             ></b-icon>
           </button>
           <button class="btn">
             <b-icon
               icon="files"
-              @click="copyItem(item)"
+              @click="buttonHandler(2, item)"
               variant="white"
             ></b-icon>
           </button>
           <button class="btn">
             <b-icon
               icon="trash"
-              @click="deleteItem(item)"
+              @click="deleteItem(3, item)"
               variant="danger"
             ></b-icon>
           </button>
@@ -105,6 +110,11 @@ import MovieService from "../services/MovieService";
 export default {
   data() {
     return {
+      modalShow: false,
+
+      copy: false,
+
+      id: null,
       name: "",
       releaseYear: null,
       description: "",
@@ -116,12 +126,38 @@ export default {
       items: [],
     };
   },
+
   created() {
     MovieService.getAllMovies().then((response) => {
       this.items = response.data;
     });
   },
+
   methods: {
+    buttonHandler(origin, item) {
+      this.modalshow = false;
+      if (item != null) {
+        this.id = item.id;
+        this.name = item.name;
+        this.releaseYear = item.releaseYear;
+        this.description = item.description;
+      } else {
+        this.id = null;
+        this.name = "";
+        this.releaseYear = null;
+        this.description = "";
+        this.nameState = null;
+        this.releaseYearState = null;
+        this.descriptionState = null;
+      }
+      if (origin == 1) {
+        this.copy = true;
+      } else {
+        this.copy = false;
+      }
+      this.modalShow = true;
+    },
+
     editItem() {
       window.location.reload();
     },
