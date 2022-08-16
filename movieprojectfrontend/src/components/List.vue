@@ -2,7 +2,7 @@
   <div>
     <div style="display: flex; justify-content: flex-end">
       <b-button
-        @click="addCopyEditHandler(0)"
+        @click="addCopyEditHandler('add')"
         class="btn"
         variant="primary"
         style="padding: 7.5px"
@@ -25,13 +25,16 @@
           <b-form-group
             label="Name:"
             label-for="name-input"
-            invalid-feedback="Name is required"
+            invalid-feedback="Please enter a name up to 50 characters in length."
             :state="nameState"
           >
             <b-form-input
               id="name-input"
+              name="name-input"
+              type="text"
               v-model="name"
-              :state="nameState"
+              v-validate="{ required: true, max: 50 }"
+              :state="validateState('name-input')"
               required
             ></b-form-input>
           </b-form-group>
@@ -39,26 +42,32 @@
           <b-form-group
             label="Release Year:"
             label-for="release-year-input"
-            invalid-feedback="Release year is required"
+            invalid-feedback="Please enter a valid (4-digit) year no earlier than 1893."
             :state="releaseYearState"
           >
             <b-form-input
               id="release-year-input"
+              name="release-year-input"
+              type="number"
               v-model="releaseYear"
-              :state="releaseYearState"
-              required
+              v-validate="{ required: true, min_value:1893, digits: 4}"
+              :state="validateState('release-year-input')"
             ></b-form-input>
           </b-form-group>
+
           <b-form-group
             label="Description:"
             label-for="description-input"
-            invalid-feedback="Description is required"
+            invalid-feedback="Please enter a description up to 500 characters in length."
             :state="descriptionState"
           >
             <b-form-input
               id="description-input"
+              name="description-input"
+              type="text"
               v-model="description"
-              :state="descriptionState"
+              v-validate="{ required: true, max: 500 }"
+              :state="validateState('description-input')"
               required
             ></b-form-input>
           </b-form-group>
@@ -103,7 +112,6 @@
 
 <script>
 import MovieService from "../services/MovieService";
-
 export default {
   data() {
     return {
@@ -131,6 +139,16 @@ export default {
   },
 
   methods: {
+    validateState(ref) {
+      if (
+        this.veeFields[ref] &&
+        (this.veeFields[ref].dirty || this.veeFields[ref].validated)
+      ) {
+        return !this.veeErrors.has(ref);
+      }
+      return null;
+    },
+
     cancelHandler() {
       this.modalShow = false;
     },
@@ -155,9 +173,10 @@ export default {
     saveHandler(id) {
       const item = {
         name: this.name,
-        releaseYear: this.releaseYear,
+        releaseYear: parseInt(this.releaseYear),
         description: this.description,
       };
+      console.log(item);
       if (this.buttonOrigin == "copy" || this.buttonOrigin == "add") {
         this.addMovie(item);
       } else {
