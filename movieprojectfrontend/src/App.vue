@@ -1,19 +1,42 @@
 <template>
 
   <div id="app">
+
     <body>
+
       <h1>Movie Database</h1>
+
       <div style="display: flex; justify-content: flex-end">
-        <button
-          class="btn btn-primary"
-          @click="addMovie()"
+        <b-button
+          v-b-modal.modal-1
+         
+          class="btn"
+          variant="primary"
           style="padding: 7.5px"
         >
           <b-icon icon="plus-circle-fill"></b-icon> Add
-        </button>
+        </b-button>
+        <b-modal 
+          id="modal-1" 
+          title = "Modification Form"
+          header-bg-variant="secondary"
+          header-border-variant="light"
+          body-text-variant="dark"
+          footer-border-variant="light"
+          footer-bg-variant="warning"
+        >
+          <b-row class = "mr-1">
+          </b-row>  
+          <p class ="my-4">Hello from modal!</p>
+        </b-modal>
       </div>
-      <div><List /></div>
+
+      <div>
+        <List />
+      </div>
+
     </body>
+
   </div>
 
 </template>
