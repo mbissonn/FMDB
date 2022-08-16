@@ -18,16 +18,57 @@
         </b-button>
         <b-modal 
           id="modal-1" 
-          title = "Modification Form"
-          header-bg-variant="secondary"
+          title = "Create a New Movie Record"
+          header-bg-variant="dark"
           header-border-variant="light"
           body-text-variant="dark"
           footer-border-variant="light"
-          footer-bg-variant="warning"
+          footer-bg-variant="secondary"
         >
-          <b-row class = "mr-1">
-          </b-row>  
-          <p class ="my-4">Hello from modal!</p>
+          <form ref="form" @submit.stop.prevent="handleSubmit">
+            <b-form-group
+              label="Name:"
+              label-for="name-input"
+              invalid-feedback="Name is required"
+              :state="nameState"
+            >
+              <b-form-input
+                id="name-input"
+                v-model="name"
+                :state="nameState"
+                required
+              ></b-form-input>
+            </b-form-group>
+            
+            <b-form-group
+              label="Release Year:"
+              label-for="release-year-input"
+              invalid-feedback="Release year is required"
+              :state="releaseYearState"
+            >
+              <b-form-input
+                id="release-year-input"
+                v-model="releaseYear"
+                :state="releaseYearState"
+                required
+              ></b-form-input>
+            
+            </b-form-group>
+            <b-form-group
+              label="Description:"
+              label-for="description-input"
+              invalid-feedback="Description is required"
+              :state="descriptionState"
+            >
+              <b-form-input
+                id="description-input"
+                v-model="description"
+                :state="descriptionState"
+                required
+              ></b-form-input>
+            </b-form-group>
+            
+          </form>
         </b-modal>
       </div>
 
@@ -50,6 +91,16 @@ export default {
   components: {
     List,
   },
+  data() {
+    return{
+      name:'',
+      releaseYear:null,
+      description:'',
+      nameState: null,
+      releaseYearState: null,
+      descriptionState: null
+    }
+  }
 };
 
 </script>
