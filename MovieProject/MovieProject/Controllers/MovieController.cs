@@ -28,7 +28,6 @@ namespace MovieProject.Controllers
         }
 
         // GET api/<MovieController>
-
         [HttpGet]
         public List<Movie> getAllMovies()
         {

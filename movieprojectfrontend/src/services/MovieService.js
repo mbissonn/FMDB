@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
 
     addMovie(movie) {
-        return axios.post(`/api/movie`, movie)
+        return axios.post(`https://localhost:44388/api/movie`, movie)
     },
 
     getAllMovies() {
