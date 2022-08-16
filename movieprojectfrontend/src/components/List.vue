@@ -21,7 +21,7 @@
         footer-bg-variant="secondary"
         v-model="modalShow"
       >
-        <form ref="form" @submit.stop.prevent="submitForm">
+        <form ref="form" validate_on_mount>
           <b-form-group
             label="Name:"
             label-for="name-input"
@@ -58,7 +58,7 @@
           <b-form-group
             label="Description:"
             label-for="description-input"
-            invalid-feedback="Please enter a description up to 500 characters in length."
+            invalid-feedback="Please limit your description to 500 characters."
             :state="descriptionState"
           >
             <b-form-input
@@ -66,7 +66,7 @@
               name="description-input"
               type="text"
               v-model="description"
-              v-validate="{ required: true, max: 500 }"
+              v-validate="{ required: false, max: 500 }"
               :state="validateState('description-input')"
               required
             ></b-form-input>
@@ -113,6 +113,7 @@
 <script>
 import MovieService from "../services/MovieService";
 export default {
+
   data() {
     return {
       modalShow: false,
@@ -174,7 +175,7 @@ export default {
       if (
         this.validateState("name-input") &&
         this.validateState("release-year-input") &&
-        this.validateState("description-input")
+        (this.validateState("description-input") || this.validateState("description-input")==null)
       ) {
         const item = {
           name: this.name,
