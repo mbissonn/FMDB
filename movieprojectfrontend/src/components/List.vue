@@ -1,6 +1,12 @@
 <template>
   <div>
-    <b-table striped hover :items="items" :fields="fields"></b-table>
+    <b-table striped hover outlined :items="items" :fields="fields"
+      ><template v-slot:cell(actions)="{ item }">
+            <button class="btn"><b-icon icon="pencil-square" @click="editItem(item)"></b-icon></button>
+            <button class="btn"><b-icon icon="files" @click="copyItem(item)"></b-icon></button>
+            <button class="btn"><b-icon icon="trash" @click="deleteItem(item)" variant="danger"></b-icon> </button>
+        </template
+    ></b-table>
   </div>
 </template>
 
@@ -22,5 +28,13 @@ export default {
 </script>
 
 <style>
+tr {
+vertical-align: middle;
+};
 
+button {
+    border: none;
+    background: none;
+    margin-bottom: 7.5px;
+}
 </style>  
