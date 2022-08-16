@@ -64,10 +64,9 @@
           </b-form-group>
         </form>
         <template slot="modal-footer">
-          <b-button @click="saveHandler()" variant="primary">Save</b-button>
+          <b-button @click="saveHandler(id)" variant="primary">Save</b-button>
           <b-button @click="cancelHandler()" variant="warning">Cancel</b-button>
-          <b-button @click="deleteItem(id)" variant="danger">Delete</b-button
-          >
+          <b-button @click="deleteItem(id)" variant="danger">Delete</b-button>
         </template>
       </b-modal>
     </div>
@@ -78,14 +77,14 @@
           <button class="btn">
             <b-icon
               icon="pencil-square"
-              @click="addCopyEditHandler('edit',item)"
+              @click="addCopyEditHandler('edit', item)"
               variant="white"
             ></b-icon>
           </button>
           <button class="btn">
             <b-icon
               icon="files"
-              @click="addCopyEditHandler('copy',item)"
+              @click="addCopyEditHandler('copy', item)"
               variant="white"
             ></b-icon>
           </button>
@@ -132,7 +131,6 @@ export default {
   },
 
   methods: {
-
     cancelHandler() {
       this.modalShow = false;
     },
@@ -154,38 +152,33 @@ export default {
       }
     },
 
-    saveHandler(){
-        if(this.buttonOrigin=="copy"||this.buttonOrigin=="add"){
-            this.addMovie();
-        } else {
-            const item = this.getMovie(this.id);
-            this.editItem(item);
-        }
+    saveHandler(id) {
+      const item = {
+        name: this.name,
+        releaseYear: this.releaseYear,
+        description: this.description,
+      };
+      if (this.buttonOrigin == "copy" || this.buttonOrigin == "add") {
+        this.addMovie(item);
+      } else {
+        this.editItem(id, item);
+      }
     },
 
-    getMovie(movieId){
-        MovieService.getMovieById(movieId);
+    getMovie(movieId) {
+      MovieService.getMovieById(movieId);
     },
-
-    editItem(item) {
-      MovieService.updateMovie(item.id, item)
-      window.location.reload();
-    },
-    copyItem(item) {
-      MovieService.addMovie(item);
+    editItem(id, item) {
+      MovieService.updateMovie(id, item);
       window.location.reload();
     },
     deleteItem(id) {
       MovieService.deleteMovie(id);
       window.location.reload();
     },
-    addMovie() {
-          const item = JSON.stringify({
-          name: this.name,
-          releaseYear: this.year,
-          description: this.description,
-          });
+    addMovie(item) {
       MovieService.addMovie(item);
+      window.location.reload();
     },
 
     // checkFormValidity() {
