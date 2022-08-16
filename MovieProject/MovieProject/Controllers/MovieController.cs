@@ -19,36 +19,41 @@ namespace MovieProject.Controllers
         {
             this.movieDAO = movieDAO;
         }
-        // GET: api/<MovieController>
+
+        // POST api/<MovieController>
+        [HttpPost]
+        public Movie Post([FromBody] Movie movie)
+        {
+            return movieDAO.addMovie(movie);
+        }
+
+        // GET api/<MovieController>
+
         [HttpGet]
         public List<Movie> getAllMovies()
         {
             return movieDAO.getAllMovies();
         }
 
-        // GET api/<MovieController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<MovieController>/{movieId}
+        [HttpGet("{movieId}")]
+        public Movie Get(int movieId)
         {
-            return "value";
+            return movieDAO.getMovieById(movieId);
         }
 
-        // POST api/<MovieController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        // PUT api/<MovieController>/{movieId}
+        [HttpPut("{movieId}")]
+        public Movie Put(int id, [FromBody] Movie movie)
         {
+            return movieDAO.updateMovie(movie);
         }
 
-        // PUT api/<MovieController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // DELETE api/<MovieController>/{movieId}
+        [HttpDelete("{movieId}")]
+        public void Delete(int movieId)
         {
-        }
-
-        // DELETE api/<MovieController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            movieDAO.deleteMovie(movieId);
         }
     }
 }

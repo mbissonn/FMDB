@@ -9,11 +9,9 @@ namespace MovieProject.DAO
     public interface IMovie
     {
         List<Movie> getAllMovies();
-        Movie getMovie(int id);
+        Movie getMovieById(int id);
         Movie addMovie(Movie movieToAdd);
-        void updateMovie(Movie movieToUpdate);
+        Movie updateMovie(Movie movieToUpdate);
         void deleteMovie(int id);
-
-
     }
 }
