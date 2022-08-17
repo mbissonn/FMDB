@@ -198,6 +198,12 @@ export default {
     });
   },
 
+  updated() {
+    MovieService.getAllMovies().then((response) => {
+      this.items = response.data;
+    });
+  },
+
   methods: {
     validateState(ref) {
       if (
