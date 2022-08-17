@@ -54,3 +54,4 @@ C:\Users\Student\workspace\github\FMDB\MovieProject\MovieProject\obj\Debug\netco
 C:\Users\Student\workspace\github\FMDB\MovieProject\MovieProject\obj\Debug\netcoreapp3.1\MovieProject.RazorTargetAssemblyInfo.cache
 C:\Users\Student\workspace\github\FMDB\MovieProject\MovieProject\obj\Debug\netcoreapp3.1\MovieProject.csproj.CopyComplete
 C:\Users\Student\workspace\github\FMDB\MovieProject\MovieProject\obj\Debug\netcoreapp3.1\MovieProject.genruntimeconfig.cache
+C:\Users\Student\workspace\github\FMDB\MovieProject\MovieProject\bin\Debug\netcoreapp3.1\libman.json
