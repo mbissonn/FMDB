@@ -56,6 +56,6 @@
 
 ### Thank you for taking the time to review my submission.
 
-    If you have any question, please to not hesitate to contact me at mbissonn@gmail.com
+    If you have any question, please do not hesitate to contact me at mbissonn@gmail.com
 
 
