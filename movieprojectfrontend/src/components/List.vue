@@ -75,22 +75,43 @@
         <template slot="modal-footer">
           <b-button @click="saveHandler(id)" variant="primary">Save</b-button>
           <b-button @click="cancelHandler()" variant="warning">Cancel</b-button>
-          <b-button @click="deleteItem(id)" variant="danger">Delete</b-button>
+          <b-button @click="showDeleteModal()" variant="danger"
+            >Delete</b-button
+          >
         </template>
+      </b-modal>
+      <b-modal
+        id="delete-modal"
+        title="Delete Record"
+        header-bg-variant="warning"
+        header-text-variant="dark"
+        header-border-variant="danger"
+        header-close-variant="primary"
+        body-text-variant="danger"
+        body-bg-variant="light"
+        footer-border-variant="danger"
+        footer-bg-variant="warning"
+        okay-variant="danger"
+        v-model="deleteShow"
+        @ok="deleteItem(id)"
+      >
+        <p style="text-align: center; font-size: larger; padding: 10px 0 10px">
+          Are you sure that you want to delete this record?
+        </p>
       </b-modal>
     </div>
 
-    <b-table 
-    striped 
-    dark 
-    hover 
-    outlined 
-    :items="items" 
-    :fields="fields"
-    :sort-by.sync="sortBy"
-    :sort-desc.sync="sortDesc"
-    sort-icon-left
-    responsive="sm"
+    <b-table
+      striped
+      dark
+      hover
+      outlined
+      :items="items"
+      :fields="fields"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
+      sort-icon-left
+      responsive="sm"
     >
       <template v-slot:cell(actions)="{ item }">
         <div style="width: 230px">
@@ -111,7 +132,7 @@
           <button class="btn">
             <b-icon
               icon="trash"
-              @click="deleteItem(item.id)"
+              @click="showDeleteModal('yes', item.id)"
               variant="danger"
             ></b-icon>
           </button>
@@ -127,6 +148,7 @@ export default {
   data() {
     return {
       modalShow: false,
+      deleteShow: false,
 
       buttonOrigin: "",
 
@@ -138,14 +160,14 @@ export default {
       releaseYearState: null,
       descriptionState: null,
 
-      sortBy: 'name',
+      sortBy: "name",
       sortDesc: false,
 
       fields: [
-        { key: 'name', sortable: true},
-        { key: 'releaseYear',  sortable: true},
-        { key: 'description',  sortable: true},
-        { key: 'actions', sortable: false}
+        { key: "name", sortable: true },
+        { key: "releaseYear", sortable: true },
+        { key: "description", sortable: true },
+        { key: "actions", sortable: false },
       ],
       items: [],
     };
@@ -177,7 +199,9 @@ export default {
       this.buttonOrigin = buttonOrigin;
       this.id = null;
       if (item != null) {
-        this.id = item.id;
+        if (buttonOrigin == "edit") {
+          this.id = item.id;
+        }
         this.name = item.name;
         this.releaseYear = item.releaseYear;
         this.description = item.description;
@@ -191,10 +215,14 @@ export default {
 
     saveHandler(id) {
       if (
-        this.validateState("name-input") &&
-        this.validateState("release-year-input") &&
-        (this.validateState("description-input") ||
-          this.validateState("description-input") == null)
+        (this.validateState("name-input") &&
+          this.validateState("release-year-input") &&
+          (this.validateState("description-input") ||
+            this.validateState("description-input") == null)) ||
+        (this.validateState("name-input") == null &&
+          this.validateState("release-year-input") == null &&
+          (this.validateState("description-input") == null || this.validateState("description-input")) &&
+          this.buttonOrigin == "copy")
       ) {
         const item = {
           name: this.name,
@@ -207,6 +235,16 @@ export default {
         } else {
           this.editItem(id, item);
         }
+        this.buttonOrigin == null;
+      } else {
+        return;
+      }
+    },
+
+    showDeleteModal(fromRow, id) {
+      if (fromRow == "yes" || this.buttonOrigin == "edit") {
+        this.id = id;
+        this.deleteShow = true;
       } else {
         return;
       }
