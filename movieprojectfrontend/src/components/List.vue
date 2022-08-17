@@ -279,7 +279,6 @@ export default {
     showConfirmationModal(message) {
       this.message = message;
       this.confirmationShow = true;
-      this.refreshData();
     },
 
     getMovie(movieId) {
@@ -305,12 +304,6 @@ export default {
         (this.modalShow = false),
         this.showConfirmationModal("Record successfully added.")
       );
-    },
-
-    refreshData() {
-      MovieService.getAllMovies().then((response) => {
-        this.items = response.data;
-      });
     },
   },
 };
