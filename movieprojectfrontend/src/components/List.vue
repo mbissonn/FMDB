@@ -61,21 +61,24 @@
             invalid-feedback="Please limit your description to 500 characters."
             :state="descriptionState"
           >
-            <b-form-input
+            <b-form-textarea
               id="description-input"
               name="description-input"
               type="text"
               v-model="description"
               v-validate="{ required: false, max: 500 }"
               :state="validateState('description-input')"
-              required
-            ></b-form-input>
+              style="height: 500px"
+            ></b-form-textarea>
           </b-form-group>
         </form>
         <template slot="modal-footer">
           <b-button @click="saveHandler(id)" variant="primary">Save</b-button>
           <b-button @click="cancelHandler()" variant="warning">Cancel</b-button>
-          <b-button v-show="buttonOrigin=='edit'" @click="showDeleteModal('',id)" variant="danger"
+          <b-button
+            v-show="buttonOrigin == 'edit'"
+            @click="showDeleteModal('', id)"
+            variant="danger"
             >Delete</b-button
           >
         </template>
@@ -97,6 +100,20 @@
       >
         <p style="text-align: center; font-size: larger; padding: 10px 0 10px">
           Are you sure that you want to delete this record?
+        </p>
+      </b-modal>
+
+      <b-modal
+        id="confirmation-modal"
+        title="Success!"
+        header-text-variant="light"
+        header-bg-variant="secondary"
+        body-text-variant="success"
+        v-model="confirmationShow"
+        hide-footer
+      >
+        <p style="text-align: center; font-size: larger; padding: 10px 0 10px">
+          {{ message }}
         </p>
       </b-modal>
     </div>
@@ -149,6 +166,8 @@ export default {
     return {
       modalShow: false,
       deleteShow: false,
+      confirmationShow: false,
+      message: "",
 
       buttonOrigin: "",
 
@@ -221,8 +240,9 @@ export default {
             this.validateState("description-input") == null)) ||
         (this.validateState("name-input") == null &&
           this.validateState("release-year-input") == null &&
-          (this.validateState("description-input") == null || this.validateState("description-input")) &&
-          this.buttonOrigin == "copy")
+          (this.validateState("description-input") == null ||
+            this.validateState("description-input")) &&
+          this.buttonOrigin != "add")
       ) {
         const item = {
           name: this.name,
@@ -250,20 +270,41 @@ export default {
       }
     },
 
+    showConfirmationModal(message) {
+      this.message = message;
+      this.confirmationShow = true;
+      this.refreshData();
+    },
+
     getMovie(movieId) {
       MovieService.getMovieById(movieId);
     },
+
     editItem(id, item) {
-      MovieService.updateMovie(id, item);
-      window.location.reload();
+      MovieService.updateMovie(id, item).then(
+        (this.modalShow = false),
+        this.showConfirmationModal("Record successfully updated.")
+      );
     },
+
     deleteItem(id) {
-      MovieService.deleteMovie(id);
-      window.location.reload();
+      MovieService.deleteMovie(id).then(
+        (this.modalShow = false),
+        this.showConfirmationModal("Record successfully deleted.")
+      );
     },
+
     addMovie(item) {
-      MovieService.addMovie(item);
-      window.location.reload();
+      MovieService.addMovie(item).then(
+        (this.modalShow = false),
+        this.showConfirmationModal("Record successfully added.")
+      );
+    },
+
+    refreshData() {
+      MovieService.getAllMovies().then((response) => {
+        this.items = response.data;
+      });
     },
   },
 };
