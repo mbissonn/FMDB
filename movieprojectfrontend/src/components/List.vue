@@ -75,7 +75,7 @@
         <template slot="modal-footer">
           <b-button @click="saveHandler(id)" variant="primary">Save</b-button>
           <b-button @click="cancelHandler()" variant="warning">Cancel</b-button>
-          <b-button @click="showDeleteModal('',id)" variant="danger"
+          <b-button v-show="buttonOrigin=='edit'" @click="showDeleteModal('',id)" variant="danger"
             >Delete</b-button
           >
         </template>
